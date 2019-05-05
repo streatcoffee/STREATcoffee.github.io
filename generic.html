@@ -40,90 +40,54 @@
 								<div class="inner">
 									<header class="major">
 										<h1>TakaSeat</h1>
+										<h5>TakaSeat, a mobile application that assists students and staff members to efficiently move throughout a University.</h5>
 									</header>
 									<br>
-									<h3>Motivation</h3>
-									<p>During certain periods of the day, shared areas of RMIT can
-										get extremely busy. The motivation for this project comes from
-										walking around common study areas for 30 minutes trying to find
-										an appropriate table and chair to study at. The city campus has
-										45,000+ people enrolled yet only approximately 2,200 seats
-										designed for study, most tables that host 4 students will have
-										2 students sitting diagonally across from each other with their
-										belongings sprawled across two seats, in turn, halving the number
-										of available seats for other students. This platform will inform
-										new students to the university of places that they can sit and
-										study without endlessly walking around. This application will
-										increase productivity of students that want to study during
-										their breaks at university.</p>
+									<h3>Overview</h3>
+									<p>TakaSeat is a mobile application that tracks users location data to determine how busy areas are within a university campus. This data will be processed by the application and return an estimation/prediction on how congested that area is.</p>
+
+									<p>Users are tracked via a unique identifier thus providing the application with a dataset relative to their connection to the university. If the user leaves the area that was initially predicted the application will adjust the prediction (weights) accordingly. </p>
+
+									<p>TakaSeat includes features such as booking shared group study rooms, approximate wait times at elevators and food stall congestion within the university.</p>
 									<br>
+
+									<h3>Motivation</h3>
+									<p>The motivation for this project comes from new students endlessly walking around campus to find an appropriate study area that isn’t occupied. New students to the university are unaware of all study areas available throughout the campus. Once all study areas are known the chance of finding an unoccupied seat and table to study at is still very slim. This application will provide all university stakeholders valuable information about the university.</p>
+										<br>
 									<h3>Description</h3>
-									<p>SitDown will track foot traffic through out certain areas
-										of the university. This will be done by placing a microcontroller
-										in these areas, the microcontroller will scan for probe packets
-										sent by WIFI enabled devices and send the number of devices found
-										to a web application. In certain locations RSSI signal strength
-										will be recorded as this is a good indicator to differentiate the
-										data collector between individuals passing by or students that
-										are seated at tables.
-										<br>
-										<br>
-										The microcontroller is ‘catching’ probe packet sent by WIFI
-										enabled devices. Probe packet contain lots of different information
-										although we are just looking for MAC addresses as each device
-										will only send one address at a given time.
-										<br>
-										<br>
-										MAC Addresses sent from devices will be randomised due the software
-										updates from device manufactures. This will not affect the required
-										data as we are looking for numbers of students in a specific area
-										rather than knowing who that person is. Although knowing how long a
-										specific student is in a certain area would be an ideal dataset to
-										log as we could use that data to predict an average study duration.
-										<br>
-										<br>
-										We will need to make some assumptions during testing as most students
-										carry multiple WIFI enabled devices which in turn will increase the
-										number of probe packet being received. These constraints will be
-										tested and coded into the program before the project is shipped.
-										<br>
-										<br>
-										Since the wireless protocol is based on connecting the device to the
-										strongest signal, probe packets will still be sent periodically by
-										devices that are already connected to a network. RSSI strength
-										(received signal strength indication) can be used to determine how
-										close or far a device(transmitter) is from the microcontroller(receiver).
-										This data will be logged in certain areas as a microcontroller may be
-										placed near a busy foot traffic walkway that might affect the true count.
-										<br>
-										<br>
-										Once the application has the number of individuals within the range of
-										the microcontroller the data will be pushed to a database where it can
-										be reviewed. This data will be important as it will help development of
-										the application predicting how many individuals are actually sitting down.
-										Logged data will also show peak traffic times i.e 30 minutes past the hour
-										when there’s more foot traffic as students are commuting to their next class.
-										<br>
-										<br>
-										The data then will be sent to a webpage that will display asynchronous
-										updates to inform the user how busy the area is. A PHP script will be used
-										with conditional arguments that will trigger elements to change different
-										colours based on the congestion in that area. PHP will be used as it is a
-										server side scripting language. i.e If a study area can hosts 100 students,
-										20 of those seats are tables with 4 seats we will assume half of them are
-										being occupied, if RSSI is between -40 dBm to -100dBm the student is sitting
-										at a table, else, the student is passing by etc...
-										<br>
-										<br>
-										The script will perform these calculations and update the webpage accordingly.
-										The script will push updates to the webpage every 60 seconds, this will give
-										time for all microcontrollers to collect packets from different channels and
-										send them to the server.
-										<br>
-										<br>
-										This service will improve productivity throughout the uni while also providing
-										the university valuable insights to how students move between university buildings.
-									</p>
+									<p>TakaSeat tracks users via location sharing once an individual is in close proximity to the university and has downloaded the application, location sharing must be enabled. GPS coordinates and barometric pressure will be recorded, pushed and stored to the application. The application will take this information and run it against an algorithm to predict congestion in nearby common areas. GPS will compute altitude based on the longitude and latitude coordinates of the device. Barometric pressure readings will run in conjunction with stored GPS coordinates to determine the building level the user is on. Once the application has determined the building level the device is on, it will prompt the user on which service they wish to use.</p>
+									<br> 
+									<h3>Understanding the users location</h3>
+									<p>The most challenging aspect of this project is accurately predicting the users location whilst in dense urban areas. Multi-path interference is a phenomenon occurring in dense urban areas where tall buildings are present. This phenomenon occurs when a GPS enabled device does not have a clear line of sight to the sky. Tall buildings can cause devices to split  signals into multiple thus causing errors in the application receiving an accurate reading.</p>
+
+									<p>The longitude and latitude coordinates along with the attitude of each point of interest will be hard coded into the application. Once the user is within 5 meters of the border of a point of interest and the application is receiving consistent location results (no major fluctuations in longitude, latitude and attitude) the user will be allocated to that area. </p>
+									<br>
+									<h3>Features</h3>
+									<h5>Tracking Shared Study Areas</h5>
+									<p>Predicting the occupancy of shared study areas will be core feature of this application. A physical count of available seats in each study area will be conducted prior to release of the application. These numbers will be hard coded into the application as this variable is unlikely to experience major fluctuations.</p>
+									<br>
+									<p>Once a user has entered a study area, the application will allocate his or her unique ID to that location. This allocation will adjust the number of seats available in that area. Once the user is detected out of the boundaries of the allocated area for more than 10 minutes, the users ID will be removed from the area thus opening an available seat. This 10 minute buffer will allow users to use the bathroom, get food or have a cigarette without affecting the applications prediction.</p>
+									<br>
+
+									<p>Duration tracking with be implemented as this data will be used to refine the application in regards to how long a user in present in each location.</p>
+									<br>
+									<br>
+									<h5>Tracking Food Court Areas</h5>
+									<p>Food court areas will be tracked similar to shared study areas. Food courts are generally located on ground floors with an outside seating area. Ground floor data will be easier to capture as nothing or no one is present below this elevation. </p>
+									<br>
+									<h5>Tracking Elevator Wait Times</h5>
+									<p>Elevator wait times will be predicted by how many users are in the university along what time of the day it is. Location tracking in close proximity to elevators will provide inaccurate readings. The metal used in elevators and the structural support in elevators shafts will block or severely limit signals being transmitted to or from the users device. The time of day will be the backbone of this algorithm as users tend to be more active 10 minutes before classes or lectures begin. The application will run the time of day against users within the university and return an estimate on approximate wait times for nearby elevators. If the users altitude drops or rises quickly the application will know that the user has used an elevator. This dataset will be logged and used in future predictions.</p>
+									<br>
+									<h3>Booking a Group Study Room</h3>
+									<p>Users will be able to book at group study room via TakaSeat. This feature will ensure all group study areas are being utilised at all times. If an area is not occupied a notification will be pushed to nearby users. The notification will only be pushed to a number of users that the room can hold. A first come, first serve basis will be implemented when making a booking.</p>
+									<br>
+									<h3>Visualising predictions:</h3>
+									<p>Predictions will be visualised by displaying a colour behind each ‘point of interest’ tile within the application. The number of users in a certain location won’t be made public to ensure application usability and protect the universities intellectual property. A prediction will be made and displayed to the user regarding how long they’ll have to wait for a seat. Green tiles will indicate an area is under occupied while red tiles are experiencing more activity than usual.</p>
+									<br>
+									<h3>Outcome</h3>
+									<p>A successful outcome of this project will be visualized by increased productivity within the university. Stakeholders moving throughout the university with ease, students finding new and underutilized study areas and easing lunch time food court congestion.</p>
+
+
 								</div>
 							</section>
 					</div>
